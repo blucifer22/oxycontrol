@@ -7,3 +7,5 @@ Opioid abuse is the leading cause of drug-related death in the United States, an
 Enter OxyControl!
 
 OxyControl is a novel solution to the problem of prescription opioid abuse. Instead of relying on patients to monitor their own dosages and stick to assigned schedules, OxyControl is a physician-programmable "smart pill bottle" that ensures that the appropriate amount of medication is taken at the right time. Up to fourteen doses of extended-release Oxycontin can be stored per device, which can be released under any schedule that the practitioner programs. The hopper that stores the medication is secured with a padlock and the dispenser is actuated with a high holding-torque servo motor, which resists most forms of mechanical tampering. Additionally, the device is reusable and constructed from readily accessible and low-cost components. Thus, OxyControl is suitable for use in low-income or developing environments.
+
+!["An image of the OxyControl circuit"](images/OxyControl_Circuit.png)

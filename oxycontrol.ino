@@ -3,6 +3,7 @@
  *
  * Copyright (C) 2020 Caroline Anderson,
  *                    Marc Chmielewski,
+ *                    Chloe White, 
  *                    Juan Lasso Velasco, and
  *                    Franklin Wei
  */

@@ -2,7 +2,7 @@
 
 ## What is OxyControl?
 
-Opioid abuse is the leading cause of drug-related death in the United States, and one of the leading preventable causes of death in persons under 50 years of age. Oftentimes, prescription narcotics are the gateway into opioid addiction, and as a result controlling the abuse thereof is a national priority. While some may argue that the solution is to stop prescribing narcs, and there is a high degree of validity to that point, there are a variety of scenarios, including major trauma and chronic pain, where they are still clinically indicated.
+Opioid abuse is the leading cause of drug-related death in the United States, and one of the leading preventable causes of death in persons under 50 years of age. Oftentimes, prescription narcotics are the gateway into opioid addiction, and as a result, controlling the abuse thereof is a national priority. While some may argue that the solution is to stop prescribing narcs, and there is a high degree of validity to that point, there are a variety of scenarios, including major trauma and chronic pain, where they are still clinically indicated.
 
 Enter OxyControl!
 

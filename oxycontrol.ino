@@ -1,14 +1,23 @@
+/*
+ * OxyControl - opioid abuse prevention device
+ *
+ * Copyright (C) 2020 Caroline Anderson,
+ *                    Marc Chmielewski,
+ *                    Juan Lasso Velasco, and
+ *                    Franklin Wei
+ */
+
 #include <LiquidCrystal.h>
 #include <Servo.h>
 
 #define READY_LED 8
 #define DISPENSE_BUTTON 9
 
-#define NDEBUG
+//#define NDEBUG
 #ifdef NDEBUG
 #define MIN_DELAY_MILLIS (12UL * 3600 * 1000)
 #else
-#define MIN_DELAY_MILLIS 1000
+#define MIN_DELAY_MILLIS 5000
 #endif
 
 #define DEGREES_PER_PILL 24

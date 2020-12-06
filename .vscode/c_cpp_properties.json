@@ -3,13 +3,28 @@
         {
             "name": "Linux",
             "includePath": [
-                "${workspaceFolder}/**"
+                "/home/msc68/Arduino/libraries/Servo/src",
+                "/home/msc68/Arduino/arduino-1.8.13/tools/**",
+                "/home/msc68/Arduino/libraries/**",
+                "/home/msc68/Arduino/arduino-1.8.13/libraries/**",
+                "/home/msc68/Arduino/arduino-1.8.13/hardware/tools/**",
+                "/home/msc68/Arduino/arduino-1.8.13/hardware/arduino/avr/**",
+                "${workspaceFolder}/**",
+                "/home/msc68/Arduino_IDE/arduino-1.8.13/hardware/arduino/avr/**",
+                "/home/msc68/Arduino_IDE/arduino-1.8.13/hardware/tools/**",
+                "/home/msc68/Arduino_IDE/arduino-1.8.13/libraries/**",
+                "/home/msc68/Arduino_IDE/arduino-1.8.13/tools/**"
             ],
-            "defines": [],
+            "defines": [
+                "USBCON"
+            ],
             "compilerPath": "/usr/bin/clang",
             "cStandard": "c11",
             "cppStandard": "c++14",
-            "intelliSenseMode": "clang-x64"
+            "intelliSenseMode": "clang-x64",
+            "forcedInclude": [
+                "/home/msc68/Arduino_IDE/arduino-1.8.13/hardware/arduino/avr/cores/arduino/Arduino.h"
+            ]
         }
     ],
     "version": 4

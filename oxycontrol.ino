@@ -1,9 +1,8 @@
 /*
  * OxyControl - opioid abuse prevention device
  *
- * Copyright (C) 2020 Caroline Anderson,
- *                    Marc Chmielewski,
- *                    Chloe White, 
+ * Copyright (C) 2020 Marc Chmielewski
+ *                    Chloe White,
  *                    Juan Lasso Velasco, and
  *                    Franklin Wei
  */
@@ -16,17 +15,24 @@
 
 //#define NDEBUG
 #ifdef NDEBUG
-#define MIN_DELAY_MILLIS (12UL * 3600 * 1000)
+#define DOSAGE_INTERVAL_MILLIS (12UL * 3600 * 1000)
+#define DISABLE_TIMEOUT_MILLIS (24UL * 3600 * 1000)
 #else
-#define MIN_DELAY_MILLIS 5000
+#define DOSAGE_INTERVAL_MILLIS 5000
+#define DISABLE_TIMEOUT_MILLIS 10000
+#define SIMULATION_SPEEDUP 9 /* compensate for tinkercad's slow speed */
+#define millis() (millis() * SIMULATION_SPEEDUP)
 #endif
 
 #define DEGREES_PER_PILL 24
 #define SCREEN_UPDATE_INTERVAL 1000
 
-enum { STATE_READY, STATE_BLOCKED, STATE_EMPTY } currentState;
+enum { STATE_READY, STATE_BLOCKED, STATE_EMPTY, STATE_DISABLED } currentState;
 
 union {
+    struct {
+        unsigned long disableTimeMillis;
+    } readyData;
     struct {
         unsigned long unlockTimeMillis;
     } blockedData;
@@ -46,24 +52,16 @@ void setLED(bool state) {
 }
 
 char *formatHMS(char *buf, long time_ms) {
-    Serial.println("point 2");
-
     if(time_ms < 0) {
         strcpy(buf, "*error*");
         return buf;
     }
-    Serial.println("point 3");
 
-    long seconds_total = time_ms / 1000;
+    long seconds_total = time_ms / 1000 + 1;
 
     long disp_s = seconds_total % 60;
     long disp_m = (seconds_total / 60) % 60;
     long disp_h = seconds_total / 3600;
-    Serial.println(disp_h);
-    Serial.println(disp_m);
-    Serial.println(disp_s);
-
-    Serial.println("point 4");
 
     /* work around crashing sprintf() in TinkerCAD */
     char *ptr = buf;
@@ -76,10 +74,6 @@ char *formatHMS(char *buf, long time_ms) {
     *ptr++ = disp_s / 10 + '0';
     *ptr++ = disp_s % 10 + '0';
     *ptr++ = 0;
-
-    Serial.println(buf);
-
-    Serial.println("point 5");
 
     return buf;
 }
@@ -100,6 +94,9 @@ void updateIndicators() {
         lcd.print(totalPills);
         lcd.print(" remaining");
         break;
+    case STATE_DISABLED:
+        lcd.print("Device locked.");
+        break;
     case STATE_BLOCKED:
         formatHMS(hmsbuf, stateData.blockedData.unlockTimeMillis - millis());
         lcd.print("Locked for:");
@@ -114,8 +111,13 @@ void updateIndicators() {
     lastScreenUpdate = millis();
 }
 
-void setup() {
+void becomeReady() {
     currentState = STATE_READY;
+    stateData.readyData.disableTimeMillis = millis() + DISABLE_TIMEOUT_MILLIS;
+}
+
+void setup() {
+    becomeReady();
 
     pinMode(READY_LED, OUTPUT); // dose ready LED
     pinMode(DISPENSE_BUTTON, INPUT_PULLUP); // dispense button
@@ -145,15 +147,12 @@ void doDispense() {
         return;
     }
 
-
     currentState = STATE_BLOCKED;
-    stateData.blockedData.unlockTimeMillis = millis() + MIN_DELAY_MILLIS;
+    stateData.blockedData.unlockTimeMillis = millis() + DOSAGE_INTERVAL_MILLIS;
 }
 
 void loop() {
     int currentButtonState = digitalRead(DISPENSE_BUTTON);
-
-    Serial.println(currentButtonState);
 
     // high is not pressed, low is pressed
     bool dispenseRequested = (currentButtonState == HIGH && lastButtonState == LOW);
@@ -166,14 +165,19 @@ void loop() {
             doDispense();
             changedState = true;
         }
+        if(millis() > stateData.readyData.disableTimeMillis) {
+            currentState = STATE_DISABLED;
+            changedState = true;
+        }
         break;
     case STATE_BLOCKED:
         if(millis() > stateData.blockedData.unlockTimeMillis) {
-            currentState = STATE_READY;
+            becomeReady();
             changedState = true;
         }
         break;
     case STATE_EMPTY:
+    case STATE_DISABLED:
     default:
         break;
     }
